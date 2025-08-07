@@ -1,16 +1,16 @@
-# ☔ IoT-Based Rainfall Monitoring System
+# IoT-Based Rainfall Monitoring System
 
 This project is an **IoT-based rainfall prediction system** that integrates:
 
-- 📈 LSTM-based machine learning model for forecasting rainfall
-- 🌍 Geospatial visualization with **Folium** and **Plotly**
-- 🌐 Flask-based REST API for real-time rainfall predictions
-- 📡 Designed for mobile app / dashboard integration (Postman tested)
-- 🚀 Deployed using Render + GitHub
+- LSTM-based machine learning model for forecasting rainfall
+- Geospatial visualization with **Folium** and **Plotly**
+- Flask-based REST API for real-time rainfall predictions
+- Designed for mobile app / dashboard integration (Postman tested)
+- Deployed using Render + GitHub
 
 ---
 
-## 🔧 Features
+##  Features
 
 - Predict rainfall by subdivision (region)
 - Display Folium map with rainfall markers
@@ -20,7 +20,7 @@ This project is an **IoT-based rainfall prediction system** that integrates:
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 Rainfall_prediction/
@@ -44,7 +44,7 @@ Rainfall_prediction/
 
 ---
 
-## 🧪 API Usage (via Postman or Mobile App)
+##  API Usage (via Postman or Mobile App)
 
 **Endpoint:**  
 ```
@@ -68,21 +68,21 @@ POST /predict
 
 ---
 
-## 🌍 Maps
+##  Maps
 
 - `/folium-map` – Folium static map with rainfall bubbles
 - `/plotly-map` – Plotly interactive map with predicted values
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 This app can be deployed to [Render](https://render.com) using:
 - `gunicorn backend.app:app` as the Start Command
 
 ---
 
-## 🧑‍💻 Author
+##  Author
 
 Built by **Shadab**  & **Afreen** using:
 - Python, Flask, LSTM (Keras)
