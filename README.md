@@ -84,6 +84,6 @@ This app can be deployed to [Render](https://render.com) using:
 
 ## 🧑‍💻 Author
 
-Built by **Shadab** using:
+Built by **Shadab**  & **Afreen** using:
 - Python, Flask, LSTM (Keras)
 - Pandas, NumPy, Plotly, Folium
