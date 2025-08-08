@@ -1,0 +1,41 @@
+import plotly.express as px
+import pandas as pd
+import json
+import os
+
+from flask import render_template
+
+@app.route('/plotly-map')
+def plotly_map():
+    # Load your rainfall data
+    rain_df = pd.read_csv(os.path.join('data', 'Rain_data.csv'))
+
+    # Check if required columns are present
+    if 'subdivision' not in rain_df.columns or 'JAN' not in rain_df.columns:
+        return {"error": "Required columns ('subdivision', 'JAN') not found in Rain_data.csv"}, 500
+
+    # Load India GeoJSON boundaries (simplified)
+    with open(os.path.join('data', 'india_states.geojson'), 'r') as f:
+        india_states = json.load(f)
+
+    # Clean up for better mapping
+    rain_df['subdivision'] = rain_df['subdivision'].str.strip().str.title()
+
+    fig = px.choropleth(
+        rain_df,
+        geojson=india_states,
+        featureidkey="properties.ST_NM",
+        locations='subdivision',
+        color='JAN',  # Change to another column as needed
+        color_continuous_scale="Viridis",
+        projection="mercator",
+        title='Rainfall Distribution (January)'
+    )
+    fig.update_geos(fitbounds="locations", visible=False)
+    fig.update_layout(margin={"r":0,"t":30,"l":0,"b":0})
+
+    # Save to HTML inside templates
+    html_path = os.path.join('templates', 'plotly_map.html')
+    fig.write_html(html_path)
+
+    return render_template('plotly_map.html')
