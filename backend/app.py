@@ -23,7 +23,7 @@ os.makedirs(STATIC_DIR, exist_ok=True)
 sys.path.append(MODEL_DIR)
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-from model.predict_rainfall import predict_next_rainfall
+from backend.model.predict_rainfall import predict_next_rainfall
 
 app = Flask(__name__)
 
