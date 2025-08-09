@@ -1,23 +1,22 @@
-# backend/app.py
-
 import os
 import sys
 import pandas as pd
 import json
-import difflib
 from flask import Flask, request, jsonify, render_template, send_from_directory
 
 # Setup path and env
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "..", "data", "Rain_data.csv")
 MODEL_DIR = os.path.join(BASE_DIR, "..", "model")
-MAP_JSON = os.path.join(BASE_DIR, "..", "data", "map_data.json")
 STATIC_DIR = os.path.join(BASE_DIR, "..", "static")
+DATA_DIR = os.path.join(STATIC_DIR, "data")
+
+MAP_JSON = os.path.join(DATA_DIR, "map_data.json")
 FOLIUM_MAP = os.path.join(STATIC_DIR, "map.html")
 PLOTLY_MAP = os.path.join(STATIC_DIR, "plotly_map.html")
 
-# Ensure static folder exists
+# Ensure folders exist
 os.makedirs(STATIC_DIR, exist_ok=True)
+os.makedirs(DATA_DIR, exist_ok=True)
 
 # Add model path to import predictor
 sys.path.append(MODEL_DIR)
@@ -56,15 +55,15 @@ def api_predict():
         return jsonify({"error": str(e)}), 400
 
 
-# Route: Generate Folium map using map_data.json
+# Route: Generate Folium map using static/data/map_data.json
 @app.route("/folium-map")
 def folium_map():
     if not os.path.exists(MAP_JSON):
-        return "❌ map_data.json not found", 404
+        return "❌ map_data.json not found in static/data", 404
 
     import folium
 
-    with open(MAP_JSON) as f:
+    with open(MAP_JSON, 'r') as f:
         data = json.load(f)
     df = pd.DataFrame(data)
 
@@ -85,17 +84,15 @@ def folium_map():
     return render_template("maps.html")
 
 
-# Route: Generate Plotly map using map_data.json
+# Route: Generate Plotly map using static/data/map_data.json
 @app.route("/plotly-map")
 def plotly_map():
     if not os.path.exists(MAP_JSON):
-        return "❌ map_data.json not found", 404
+        return "❌ map_data.json not found in static/data", 404
 
     import plotly.express as px
-    import json
-    import pandas as pd
 
-    with open(MAP_JSON) as f:
+    with open(MAP_JSON, 'r') as f:
         data = json.load(f)
     df = pd.DataFrame(data)
 
@@ -106,11 +103,7 @@ def plotly_map():
         color="predicted_rainfall",
         size="predicted_rainfall",
         hover_name="subdivision",
-        hover_data={
-            "latitude": False,
-            "longitude": False,
-            "predicted_rainfall": True
-        },
+        hover_data={"latitude": False, "longitude": False, "predicted_rainfall": True},
         color_continuous_scale="Viridis",
         size_max=30,
         zoom=4,
@@ -121,11 +114,7 @@ def plotly_map():
     fig.update_layout(
         mapbox_style="carto-positron",
         margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        coloraxis_colorbar=dict(
-            title="Predicted Rainfall (mm)",
-            ticks="outside",
-            ticklen=3
-        )
+        coloraxis_colorbar=dict(title="Predicted Rainfall (mm)", ticks="outside", ticklen=3)
     )
 
     fig.write_html(PLOTLY_MAP, full_html=False, include_plotlyjs='cdn')
